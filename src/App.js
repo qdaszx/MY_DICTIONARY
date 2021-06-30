@@ -84,6 +84,68 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    const dictionary = firestore.collection("dictionarys");
+
+    // 새 콜렉션 만들기
+    dictionary.doc("my_dictionary1").set({
+      title: "단어 이름-1",
+      text: "단어 설명-1",
+      example: "단어 예시-1",
+    });
+
+    // dictionary
+    //   .doc("my_dictionary1")
+    //   .get()
+    //   .then((doc) => {
+    //     // doc에 값이 있나 없나
+    //     if (doc.exists) {
+    //       console.log(doc.data());
+    //       console.log(doc.id);
+    //     }
+    //     console.log(doc.exists);
+    //   });
+
+    // 모든 값을 갖고오기(forEach) .doc이 없다.
+    // dictionary.get().then((docs) => {
+    //   // 배열로 만들어보기
+    //   let dictionary_data = [];
+    //   docs.forEach((doc) => {
+    //     if (doc.exists) {
+    //       dictionary_data = [...dictionary_data, { id: doc.id, ...doc.data() }];
+    //     }
+    //     // console.log(dictionary_data);
+    //     // console.log(doc.data());
+    //     // console.log(doc.id);
+    //   });
+    // });
+
+    // 추가하기
+    // dictionary
+    //   .add({
+    //     title: "단어 제목4",
+    //     text: "단어 설명4",
+    //     example: "단어 예시4",
+    //   })
+    //   .then((docRef) => {
+    //     console.log(docRef);
+    //     console.log(docRef.id);
+    //   });
+
+    // 업데이트하기
+    // dictionary.doc("URbLAHHKW1XqZQvV3wlr").update({
+    //   title: "단어 이름5",
+    //   text: "단어 설명5",
+    //   example: "단어 예시5",
+    // });
+
+    // 삭제하기
+    // dictionary
+    //   .doc("5MqUooLaLfZup79USLXF")
+    //   .delete()
+    //   .then((docRef) => {
+    //     console.log("지웠어요!");
+    //   });
+
     // console.log(this.props);
     // console.log({ firestore });
   }
