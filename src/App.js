@@ -6,7 +6,7 @@ import Detail from "./Detail";
 import NotFound from "./NotFound";
 
 import { withRouter } from "react-router";
-import { Route, Link, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 class App extends React.Component {
   constructor(props) {
