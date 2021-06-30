@@ -3,9 +3,10 @@ import styled from "styled-components";
 
 import Dictionary from "./Main";
 import Detail from "./Detail";
+import NotFound from "./NotFound";
 
 import { withRouter } from "react-router";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Switch } from "react-router-dom";
 
 class App extends React.Component {
   constructor(props) {
@@ -61,14 +62,20 @@ class App extends React.Component {
       <div className="App">
         <Container>
           <Title>나만의 단어장</Title>
-          <Route
-            path="/"
-            exact
-            render={(props) => (
-              <Dictionary history={this.props.history} list={this.state.list} />
-            )}
-          />
-          <Route path="/detail" component={Detail} />
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={(props) => (
+                <Dictionary
+                  history={this.props.history}
+                  list={this.state.list}
+                />
+              )}
+            />
+            <Route path="/detail" component={Detail} />
+            <Route render={() => <NotFound history={this.props.history} />} />
+          </Switch>
         </Container>
         <Input>
           <Fix>단어 :</Fix>
