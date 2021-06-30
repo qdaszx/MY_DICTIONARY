@@ -3,13 +3,18 @@ import styled from "styled-components";
 
 const Dictionary = (props) => {
   const my_list = props.list;
+  console.log(props); // history 찍히는가
 
   return (
     <ListStyle>
       {my_list.map((list, index) => {
         console.log(list);
         return (
-          <div>
+          <div
+            onClick={() => {
+              props.history.push("/detail");
+            }}
+          >
             <ItemStyle key={index}>
               <Fix>단어 : </Fix>
               {list.title}

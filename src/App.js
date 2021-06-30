@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 import Dictionary from "./Main";
+import Detail from "./Detail";
+
+import { withRouter } from "react-router";
+import { Route, Link } from "react-router-dom";
 
 class App extends React.Component {
   constructor(props) {
@@ -48,9 +52,8 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.title.current);
-    console.log(this.text);
-    console.log(this.example);
+    console.log(this.state.list);
+    console.log(this.props);
   }
 
   render() {
@@ -58,7 +61,14 @@ class App extends React.Component {
       <div className="App">
         <Container>
           <Title>나만의 단어장</Title>
-          <Dictionary list={this.state.list} />
+          <Route
+            path="/"
+            exact
+            render={(props) => (
+              <Dictionary history={this.props.history} list={this.state.list} />
+            )}
+          />
+          <Route path="/detail" component={Detail} />
         </Container>
         <Input>
           <Fix>단어 :</Fix>
@@ -124,4 +134,4 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-export default App;
+export default withRouter(App);

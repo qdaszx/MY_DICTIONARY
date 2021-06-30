@@ -24,3 +24,5 @@ yarn start
 yarn add node-sass@4.14.1 open-color sass-loader classnames
 
 yarn add styled-components
+
+yarn add react-router-dom (SPA주소 옮기기 위해 라우팅을 해야한다)
