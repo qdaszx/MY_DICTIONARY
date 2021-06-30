@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import Dictionary from "./Main";
 import Detail from "./Detail";
@@ -8,24 +8,46 @@ import NotFound from "./NotFound";
 import { withRouter } from "react-router";
 import { Route, Switch } from "react-router-dom";
 
+import { connect } from "react-redux"; // 커넥트함수
+import { loadDictionary, createDictionary } from "./redux/modules/dictionary"; // 액션함수
+
+// 리덕스 스토어에 있는 스테이트(상태값을)를 props에 형태로 넣어주는, 컴포넌트에 넣어주는친구)
+const mapStateToPorps = (state) => {
+  // state 값은 스토어에 있는 이니셜스테이트 상태값
+  return { dictionary_list: state.dictionary.list };
+};
+
+// 액션이 생기는 것을 감시하는 디스패치를 넘겨주는 친구
+const mapDispatchToProps = (dispatch) => {
+  // 액션함수 가져오기
+  return {
+    load: () => {
+      dispatch(loadDictionary());
+    },
+    create: (dictionary) => {
+      dispatch(createDictionary(dictionary));
+    },
+  };
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [
-        {
-          id: "list_0",
-          title: "정ㅋ벅ㅋ",
-          text: "정복하다",
-          example: "리액트 정ㅋ벅ㅋ",
-        },
-        {
-          id: "list_1",
-          title: "정ㅋ벅ㅋ",
-          text: "정복하다",
-          example: "리액트 정ㅋ벅ㅋ",
-        },
-      ],
+      // list: [
+      //   {
+      //     id: "list_0",
+      //     title: "정ㅋ벅ㅋ",
+      //     text: "정복하다",
+      //     example: "리액트 정ㅋ벅ㅋ",
+      //   },
+      //   {
+      //     id: "list_1",
+      //     title: "정ㅋ벅ㅋ",
+      //     text: "정복하다",
+      //     example: "리액트 정ㅋ벅ㅋ",
+      //   },
+      // ],
     };
 
     this.title = React.createRef();
@@ -34,26 +56,32 @@ class App extends React.Component {
   }
 
   addDictionary = () => {
-    let list = this.state.list;
+    // let list = this.state.list;
 
     const new_title = this.title.current.value;
     const new_text = this.text.current.value;
     const new_example = this.example.current.value;
 
+    this.props.create({
+      id: "list_111",
+      title: new_title,
+      text: new_text,
+      example: new_example,
+    });
+
     this.setState({
-      list: [
-        ...list,
-        {
-          title: new_title,
-          text: new_text,
-          example: new_example,
-        },
-      ],
+      //   list: [
+      //     ...list,
+      //     {
+      //       title: new_title,
+      //       text: new_text,
+      //       example: new_example,
+      //     },
+      //   ],
     });
   };
 
   componentDidMount() {
-    console.log(this.state.list);
     console.log(this.props);
   }
 
@@ -61,6 +89,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Container>
+          <Circle />
           <Title>나만의 단어장</Title>
           <Switch>
             <Route
@@ -69,11 +98,11 @@ class App extends React.Component {
               render={(props) => (
                 <Dictionary
                   history={this.props.history}
-                  list={this.state.list}
+                  list={this.props.dictionary_list}
                 />
               )}
             />
-            <Route path="/detail" component={Detail} />
+            <Route path="/detail/:index" component={Detail} />
             <Route render={() => <NotFound history={this.props.history} />} />
           </Switch>
         </Container>
@@ -90,6 +119,40 @@ class App extends React.Component {
     );
   }
 }
+const move = keyframes`
+  0% {
+    top: 3px;
+    left: 2px;
+  }
+  25% {
+    top: 3px;
+    left: 516px;
+  }
+  50% {
+    left: 516px;
+    top: 565px;
+
+  }
+  75% {
+    top: 565px;
+    left: 2px;
+  }
+  100% {
+    top: 3px;
+    left: 2px;
+  }
+`;
+
+const Circle = styled.div`
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background-color: #6a7ba2;
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  animation: ${move} 5s 1s infinite;
+`;
 
 const Fix = styled.p`
   font-size: 15px;
@@ -134,6 +197,7 @@ const Container = styled.div`
   margin: 20px auto;
   border-radius: 10px;
   border: 1px solid #eee;
+  position: relative;
 `;
 
 const Title = styled.h1`
@@ -141,4 +205,4 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-export default withRouter(App);
+export default connect(mapStateToPorps, mapDispatchToProps)(withRouter(App));

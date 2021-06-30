@@ -1,18 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
+// 함수형 컴포넌트는 훅을 이용해서 리덕스를 쓴다
+import { useSelector, useDispatch } from "react-redux";
 const Dictionary = (props) => {
-  const my_list = props.list;
+  const dictionary_list = useSelector((state) => state.dictionary.list);
   console.log(props); // history 찍히는가
 
   return (
     <ListStyle>
-      {my_list.map((list, index) => {
+      {dictionary_list.map((list, index) => {
         console.log(list);
         return (
           <div
             onClick={() => {
-              props.history.push("/detail");
+              props.history.push("/detail/" + index);
             }}
           >
             <ItemStyle key={index}>
