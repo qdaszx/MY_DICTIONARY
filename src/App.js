@@ -11,6 +11,8 @@ import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux"; // 커넥트함수
 import { loadDictionary, createDictionary } from "./redux/modules/dictionary"; // 액션함수
 
+import { firestore } from "./firebase";
+
 // 리덕스 스토어에 있는 스테이트(상태값을)를 props에 형태로 넣어주는, 컴포넌트에 넣어주는친구)
 const mapStateToPorps = (state) => {
   // state 값은 스토어에 있는 이니셜스테이트 상태값
@@ -82,7 +84,8 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
+    // console.log({ firestore });
   }
 
   render() {

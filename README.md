@@ -28,3 +28,5 @@ yarn add styled-components
 yarn add react-router-dom (SPA주소 옮기기 위해 라우팅을 해야한다)
 
 yarn add redux react-redux (전역 상태 관리하기 위해서 리덕스가 필요하다)
+
+yarn add firebase (파이어베이스 패키지 설치)
