@@ -176,7 +176,7 @@ const Input = styled.div`
     width: 70%;
     margin-bottom: 3px;
     &:focus {
-      border: 2px solid #6a7ba2;
+      border: 3px solid #6a7ba2;
     }
   }
   & button {

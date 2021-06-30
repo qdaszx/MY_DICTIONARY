@@ -54,10 +54,10 @@ const Fix = styled.span`
 const ListStyle = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 50vh;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: #fff;
+  background-color: #ffdfde;
 `;
 
 const ItemStyle = styled.div`
