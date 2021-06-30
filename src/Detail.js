@@ -1,7 +1,20 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteDictionary } from "./redux/modules/dictionary";
+import { deleteDictionaryFB } from "./redux/modules/dictionary";
 import styled from "styled-components";
+
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import SvgIcon from "@material-ui/core/SvgIcon";
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
 
 const Detail = (props) => {
   const dispatch = useDispatch();
@@ -22,21 +35,25 @@ const Detail = (props) => {
       <ItemStyle>
         <Fix>예시 : </Fix> {dictionary_list[dictionary_index].example}
       </ItemStyle>
-      <button
-        onClick={() => {
-          dispatch(deleteDictionary(dictionary_index));
-          props.history.push("/");
-        }}
-      >
-        삭제하기
-      </button>
-      <button
-        onClick={() => {
-          props.history.push("/");
-        }}
-      >
-        홈으로가기
-      </button>
+      <ButtonGroup>
+        <IconButton
+          style={{ color: "red" }}
+          onClick={() => {
+            dispatch(deleteDictionaryFB(dictionary_index));
+            props.history.push("/");
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+        <IconButton
+          style={{ color: "blue" }}
+          onClick={() => {
+            props.history.push("/");
+          }}
+        >
+          <HomeIcon style={{ color: "blue" }} />
+        </IconButton>
+      </ButtonGroup>
     </div>
   );
 };
@@ -53,15 +70,6 @@ const Fix = styled.span`
   font-weight: 600;
   color: #ffdfde;
   margin: 0 4px 0 0;
-`;
-
-const ListStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background-color: #fff;
 `;
 
 export default Detail;

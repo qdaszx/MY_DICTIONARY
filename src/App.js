@@ -4,19 +4,31 @@ import styled, { keyframes } from "styled-components";
 import Dictionary from "./Main";
 import Detail from "./Detail";
 import NotFound from "./NotFound";
+import Spinner from "./Spinner";
 
 import { withRouter } from "react-router";
 import { Route, Switch } from "react-router-dom";
 
 import { connect } from "react-redux"; // 커넥트함수
-import { loadDictionary, createDictionary } from "./redux/modules/dictionary"; // 액션함수
+import {
+  loadDictionary,
+  createDictionary,
+  loadDictionaryFB,
+  addDictionaryFB,
+} from "./redux/modules/dictionary"; // 액션함수
 
 import { firestore } from "./firebase";
+
+import IconButton from "@material-ui/core/IconButton";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 // 리덕스 스토어에 있는 스테이트(상태값을)를 props에 형태로 넣어주는, 컴포넌트에 넣어주는친구)
 const mapStateToPorps = (state) => {
   // state 값은 스토어에 있는 이니셜스테이트 상태값
-  return { dictionary_list: state.dictionary.list };
+  return {
+    dictionary_list: state.dictionary.list,
+    is_loaded: state.dictionary.is_loaded,
+  };
 };
 
 // 액션이 생기는 것을 감시하는 디스패치를 넘겨주는 친구
@@ -24,10 +36,10 @@ const mapDispatchToProps = (dispatch) => {
   // 액션함수 가져오기
   return {
     load: () => {
-      dispatch(loadDictionary());
+      dispatch(loadDictionaryFB());
     },
     create: (dictionary) => {
-      dispatch(createDictionary(dictionary));
+      dispatch(addDictionaryFB(dictionary));
     },
   };
 };
@@ -84,15 +96,15 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    const dictionary = firestore.collection("dictionarys");
+    this.props.load();
 
-    // 새 콜렉션 만들기
-    dictionary.doc("my_dictionary1").set({
-      title: "단어 이름-1",
-      text: "단어 설명-1",
-      example: "단어 예시-1",
-    });
-
+    // const dictionary = firestore.collection("dictionarys");
+    // // 새 콜렉션 만들기
+    // dictionary.doc("my_dictionary1").set({
+    //   title: "단어 이름-1",
+    //   text: "단어 설명-1",
+    //   example: "단어 예시-1",
+    // });
     // dictionary
     //   .doc("my_dictionary1")
     //   .get()
@@ -104,7 +116,6 @@ class App extends React.Component {
     //     }
     //     console.log(doc.exists);
     //   });
-
     // 모든 값을 갖고오기(forEach) .doc이 없다.
     // dictionary.get().then((docs) => {
     //   // 배열로 만들어보기
@@ -118,7 +129,6 @@ class App extends React.Component {
     //     // console.log(doc.id);
     //   });
     // });
-
     // 추가하기
     // dictionary
     //   .add({
@@ -130,14 +140,12 @@ class App extends React.Component {
     //     console.log(docRef);
     //     console.log(docRef.id);
     //   });
-
     // 업데이트하기
     // dictionary.doc("URbLAHHKW1XqZQvV3wlr").update({
     //   title: "단어 이름5",
     //   text: "단어 설명5",
     //   example: "단어 예시5",
     // });
-
     // 삭제하기
     // dictionary
     //   .doc("5MqUooLaLfZup79USLXF")
@@ -145,7 +153,6 @@ class App extends React.Component {
     //   .then((docRef) => {
     //     console.log("지웠어요!");
     //   });
-
     // console.log(this.props);
     // console.log({ firestore });
   }
@@ -153,33 +160,46 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Container>
-          <Circle />
-          <Title>나만의 단어장</Title>
-          <Switch>
-            <Route
-              path="/"
-              exact
-              render={(props) => (
-                <Dictionary
-                  history={this.props.history}
-                  list={this.props.dictionary_list}
+        {!this.props.is_loaded ? (
+          <Spinner />
+        ) : (
+          <React.Fragment>
+            <Container>
+              <Circle />
+              <Title>나만의 단어장</Title>
+              <Switch>
+                <Route
+                  path="/"
+                  exact
+                  render={(props) => (
+                    <Dictionary
+                      history={this.props.history}
+                      list={this.props.dictionary_list}
+                    />
+                  )}
                 />
-              )}
-            />
-            <Route path="/detail/:index" component={Detail} />
-            <Route render={() => <NotFound history={this.props.history} />} />
-          </Switch>
-        </Container>
-        <Input>
-          <Fix>단어 :</Fix>
-          <input type="text" ref={this.title} />
-          <Fix>설명 :</Fix>
-          <input type="text" ref={this.text} />
-          <Fix>예시 :</Fix>
-          <input type="text" ref={this.example} />
-          <button onClick={this.addDictionary}>추가하기</button>
-        </Input>
+                <Route path="/detail/:index" component={Detail} />
+                <Route
+                  render={() => <NotFound history={this.props.history} />}
+                />
+              </Switch>
+            </Container>
+
+            <Input>
+              <Fix>단어 :</Fix>
+              <input type="text" ref={this.title} />
+              <Fix>설명 :</Fix>
+              <input type="text" ref={this.text} />
+              <Fix>예시 :</Fix>
+              <input type="text" ref={this.example} />
+              <SaveButton>
+                <IconButton onClick={this.addDictionary}>
+                  <CloudUploadIcon fontSize="large" />
+                </IconButton>
+              </SaveButton>
+            </Input>
+          </React.Fragment>
+        )}
       </div>
     );
   }
@@ -226,7 +246,14 @@ const Fix = styled.p`
   margin: 0;
 `;
 
+const SaveButton = styled.div`
+  position: absolute;
+  top: 75px;
+  right: 10px;
+`;
+
 const Input = styled.div`
+  position: relative;
   max-width: 500px;
   min-height: 10vh;
   background-color: #ffdfde;
@@ -238,19 +265,11 @@ const Input = styled.div`
     padding: 5px;
   }
   & input {
-    width: 70%;
+    width: 80%;
     margin-bottom: 3px;
     &:focus {
       border: 3px solid #6a7ba2;
     }
-  }
-  & button {
-    margin: 0 0 0 20px;
-    width: 20%;
-    color: #ffdfde;
-    background-color: #6a7ba2;
-    border: 1px solid #6a7ba2;
-    border-radius: 5px;
   }
 `;
 

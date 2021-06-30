@@ -32,3 +32,5 @@ yarn add redux react-redux (전역 상태 관리하기 위해서 리덕스가 �
 yarn add firebase (파이어베이스 패키지 설치)
 
 yarn add redux-thunk (미들웨어를 쓰기위해서 설치)
+
+yarn add @material-ui/core @material-ui/icons (머테리얼 UI 설치하기, 컴포넌트 부트스트랩같은거)
