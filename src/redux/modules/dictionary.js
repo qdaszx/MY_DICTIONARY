@@ -104,7 +104,7 @@ export const deleteDictionaryFB = (dictionary) => {
 };
 
 // Reducer
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     // do reducer stuff
     case "dictionary/LOAD": {
@@ -112,7 +112,7 @@ export default function reducer(state = initialState, action) {
         return { list: action.dictionary, is_loaded: true };
       }
 
-      return state;
+      return { state, is_loaded: true };
     }
 
     case "dictionary/CREATE": {

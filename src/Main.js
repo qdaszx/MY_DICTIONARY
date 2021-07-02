@@ -6,33 +6,35 @@ import { useSelector, useDispatch } from "react-redux";
 const Dictionary = (props) => {
   const dictionary_list = useSelector((state) => state.dictionary.list);
   console.log(props); // history 찍히는가
+  console.log(dictionary_list);
 
   return (
     <ListStyle>
-      {dictionary_list.map((list, index) => {
-        console.log(list);
-        return (
-          <div
-            onClick={() => {
-              props.history.push("/detail/" + index);
-            }}
-          >
-            <ItemStyle key={index}>
-              <Fix>단어 : </Fix>
-              {list.title}
-            </ItemStyle>
-            <ItemStyle key={index}>
-              <Fix>설명 : </Fix>
-              {list.text}
-            </ItemStyle>
-            <ItemStyle key={index}>
-              <Fix>예시 : </Fix>
-              {list.example}
-            </ItemStyle>
-            <Line />
-          </div>
-        );
-      })}
+      {dictionary_list &&
+        dictionary_list.map((list, index) => {
+          console.log(list);
+          return (
+            <div
+              onClick={() => {
+                props.history.push("/detail/" + index);
+              }}
+            >
+              <ItemStyle key={index}>
+                <Fix>단어 : </Fix>
+                {list.title}
+              </ItemStyle>
+              <ItemStyle key={index}>
+                <Fix>설명 : </Fix>
+                {list.text}
+              </ItemStyle>
+              <ItemStyle key={index}>
+                <Fix>예시 : </Fix>
+                {list.example}
+              </ItemStyle>
+              <Line />
+            </div>
+          );
+        })}
     </ListStyle>
   );
 };
